@@ -19,6 +19,7 @@ export default defineConfig({
   root: resolve(__dirname, 'src'),
   resolve: {
     alias: {
+      '@': '/src',
       '@images': resolve(__dirname, './src/assets/images'),
     },
   },
@@ -31,36 +32,6 @@ export default defineConfig({
         // Example: Generate files, validate configs, etc.
       },
     },
-    // Image Optimization
-    ViteImageOptimizer({
-      // Test regex for matching files
-      test: /\.(jpe?g|png|gif|webp|svg)$/i,
-      // Size optimization
-      size: {
-        width: 2048, // Maximum width
-        height: 2048, // Maximum height
-        resize: true,
-      },
-      // Generate multiple sizes
-      responsive: {
-        sizes: [320, 640, 960, 1200],
-        // Generate srcset automatically
-        generateSrcset: true,
-      },
-      // Quality optimization
-      quality: {
-        jpg: 80,
-        jpeg: 80,
-        png: 80,
-        webp: 80,
-      },
-      // Convert to WebP
-      webp: {
-        quality: 80,
-        // Create WebP versions alongside originals
-        create: true,
-      },
-    }),
 
     // Gzip/Brotli Compression
     viteCompression({
@@ -76,6 +47,45 @@ export default defineConfig({
       minify: true,
       inject: {
         data: {},
+      },
+    }),
+
+    ViteImageOptimizer({
+      test: /\.(jpe?g|png|gif|webp|svg)$/i,
+      include: ['src/assets/images/**/*'],
+      exclude: ['node_modules/**/*'],
+      logStats: true,
+      jpg: {
+        quality: 75,
+        progressive: true,
+      },
+      png: {
+        quality: 75,
+        optimizationLevel: 3,
+      },
+      webp: {
+        quality: 75,
+        lossless: false,
+        nearLossless: false,
+      },
+      gif: {
+        optimizationLevel: 3,
+      },
+      svg: {
+        multipass: true,
+        plugins: [
+          {
+            name: 'preset-default',
+            params: {
+              overrides: {
+                removeViewBox: false,
+                cleanupNumericValues: {
+                  floatPrecision: 2,
+                },
+              },
+            },
+          },
+        ],
       },
     }),
   ],
@@ -94,6 +104,7 @@ export default defineConfig({
         manualChunks: {
           vendor: ['jquery'],
         },
+        assetFileNames: 'assets/[name]-[hash][extname]',
       },
     },
     minify: 'terser',
@@ -103,6 +114,8 @@ export default defineConfig({
         drop_debugger: !SHOULD_SHOW_CONSOLE_LOG,
       },
     },
+    assetsInclude: ['**/*.jpg', '**/*.png', '**/*.gif', '**/*.webp', '**/*.svg'],
+    assetsInlineLimit: 4096,
   },
 
   // CSS Configuration
