@@ -5,15 +5,20 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
+    <script type="module" src="scripts/main.ts"></script>
   </head>
   <body>
     <div id="app"></div>
-    <img 
-    src="@images/me.jpg" 
-    srcset="@images/me-320.jpg 320w, @images/me-640.jpg 640w, @images/me-960.jpg 960w, @images/me-1200.jpg 1200w"
-    sizes="(max-width: 320px) 280px, (max-width: 640px) 600px, 960px"
-    alt="Description"
-  />
-    <script type="module" src="scripts/main.ts"></script>
+    <img
+      src="@images/me.jpg"
+      srcset="
+        @images/me-320.jpg   320w,
+        @images/me-640.jpg   640w,
+        @images/me-960.jpg   960w,
+        @images/me-1200.jpg 1200w
+      "
+      sizes="(max-width: 320px) 280px, (max-width: 640px) 600px, 960px"
+      alt="Description"
+    />
   </body>
 </html>

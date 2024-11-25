@@ -1,7 +1,17 @@
 import '../styles/style.css';
+import $ from 'jquery';
+
 import typescriptLogo from '../assets/images/typescript.svg';
 
 import { setupCounter } from './counter.ts';
+
+declare global {
+  interface Window {
+    $: JQueryStatic;
+    jQuery: JQueryStatic;
+  }
+}
+window.$ = window.jQuery = $;
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -19,3 +29,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `;
 
 setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);
+
+console.log('Hello World');
+console.log($);

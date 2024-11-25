@@ -63,7 +63,6 @@ export default tseslint.config(
         },
       ],
 
-
       // Code style rules
       'no-multiple-empty-lines': ['error', { max: 1 }],
       'import/newline-after-import': ['error', { count: 1 }],

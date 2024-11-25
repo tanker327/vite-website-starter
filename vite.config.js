@@ -3,8 +3,17 @@ import { defineConfig } from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import viteCompression from 'vite-plugin-compression';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import strip from '@rollup/plugin-strip';
 import { resolve } from 'path';
+import glob from 'glob';
+
+const SHOULD_SHOW_CONSOLE_LOG = true;
+
+// Get all HTML files from src directory
+const htmlFiles = glob.sync('src/**/*.html').reduce((acc, file) => {
+  const name = file.split('/').pop().replace('.html', '');
+  acc[name] = resolve(__dirname, file);
+  return acc;
+}, {});
 
 export default defineConfig({
   root: resolve(__dirname, 'src'),
@@ -14,6 +23,14 @@ export default defineConfig({
     },
   },
   plugins: [
+    {
+      name: 'pre-build',
+      buildStart: async () => {
+        // Your pre-build logic here
+        console.log('Running pre-build tasks...');
+        // Example: Generate files, validate configs, etc.
+      },
+    },
     // Image Optimization
     ViteImageOptimizer({
       // Test regex for matching files
@@ -58,18 +75,8 @@ export default defineConfig({
     createHtmlPlugin({
       minify: true,
       inject: {
-        data: {
-          title: 'My Web App',
-          description: 'My awesome web application',
-        },
+        data: {},
       },
-    }),
-
-    // Remove console.logs in Production
-    strip({
-      include: ['**/*.js', '**/*.ts'],
-      functions: ['console.log', 'console.debug', 'console.info'],
-      sourceMap: true,
     }),
   ],
 
@@ -82,17 +89,18 @@ export default defineConfig({
     cssCodeSplit: true,
     sourcemap: true,
     rollupOptions: {
+      input: htmlFiles,
       output: {
         manualChunks: {
-          vendor: [], // Add your dependencies
+          vendor: ['jquery'],
         },
       },
     },
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
-        drop_debugger: true,
+        drop_console: !SHOULD_SHOW_CONSOLE_LOG,
+        drop_debugger: !SHOULD_SHOW_CONSOLE_LOG,
       },
     },
   },

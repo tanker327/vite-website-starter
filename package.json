@@ -12,7 +12,7 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "@rollup/plugin-strip": "^3.0.4",
+    "@types/jquery": "^3.5.32",
     "@vitejs/plugin-legacy": "^5.4.3",
     "autoprefixer": "^10.4.20",
     "cross-env": "^7.0.3",
@@ -33,5 +33,8 @@
     "vite-plugin-image-optimizer": "^1.1.8",
     "vite-plugin-pwa": "^0.21.0",
     "vite-plugin-webfont-dl": "^3.10.1"
+  },
+  "dependencies": {
+    "jquery": "^3.7.1"
   }
 }
